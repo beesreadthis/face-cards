@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#6d4aff">
+  <meta name="description" content="A private personal face-card memory app.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Face Cards</title>
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">PERSONAL MEMORY DECK</p>
+      <h1>Face Cards</h1>
+    </div>
+    <button id="addBtn" class="primary">＋ Add person</button>
+  </header>
+
+  <main>
+    <section class="toolbar">
+      <input id="searchCards" type="search" placeholder="Search saved people">
+      <button id="studyBtn" class="secondary">Study mode</button>
+      <button id="backupBtn" class="secondary">Backup</button>
+      <label class="secondary file-label">Restore<input id="restoreInput" type="file" accept=".json,application/json"></label>
+    </section>
+
+    <section id="emptyState" class="empty">
+      <div class="empty-icon">👤</div>
+      <h2>Your face deck is empty</h2>
+      <p>Add a person by name. The app will try to find a photo and birthday automatically.</p>
+      <button id="emptyAddBtn" class="primary">Add your first person</button>
+    </section>
+
+    <section id="cardGrid" class="card-grid" aria-live="polite"></section>
+  </main>
+
+  <dialog id="personDialog">
+    <form method="dialog" id="personForm">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" id="dialogEyebrow">NEW CARD</p>
+          <h2 id="dialogTitle">Add a person</h2>
+        </div>
+        <button value="cancel" class="icon-button" aria-label="Close">✕</button>
+      </div>
+
+      <div id="lookupArea">
+        <label>
+          Person's name
+          <div class="lookup-row">
+            <input id="lookupName" autocomplete="off" placeholder="e.g. Tom Cruise">
+            <button type="button" id="lookupBtn" class="primary">Find</button>
+          </div>
+        </label>
+        <p class="hint">Searches Wikidata. You will choose the correct person before saving.</p>
+        <div id="lookupStatus" class="status" hidden></div>
+        <div id="results" class="results"></div>
+      </div>
+
+      <div id="editorArea" hidden>
+        <div class="photo-editor">
+          <img id="previewImage" alt="Selected person preview">
+          <div>
+            <label>
+              Photo URL
+              <input id="photoUrl" type="url" placeholder="https://...">
+            </label>
+            <label class="secondary upload-label">Choose photo from phone
+              <input id="photoUpload" type="file" accept="image/*">
+            </label>
+          </div>
+        </div>
+
+        <label>
+          Name
+          <input id="personName" required>
+        </label>
+
+        <label>
+          Birthday
+          <input id="birthday" type="date">
+        </label>
+
+        <div class="dialog-actions">
+          <button type="button" id="backToSearch" class="secondary">Back</button>
+          <button type="submit" class="primary">Save card</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="cardDialog" class="card-dialog">
+    <div class="dialog-head">
+      <p class="eyebrow">TAP CARD TO FLIP</p>
+      <button id="closeCardDialog" class="icon-button" aria-label="Close">✕</button>
+    </div>
+    <div id="largeCard" class="face-card large" tabindex="0"></div>
+    <div class="dialog-actions">
+      <button id="editCardBtn" class="secondary">Edit</button>
+      <button id="deleteCardBtn" class="danger">Delete</button>
+    </div>
+  </dialog>
+
+  <template id="cardTemplate">
+    <article class="face-card" tabindex="0">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img alt="">
+          <div class="front-caption"></div>
+        </div>
+        <div class="card-face card-back">
+          <p class="eyebrow">WHO IS THIS?</p>
+          <h2 class="back-name"></h2>
+          <div class="birthday-block">
+            <span>Birthday</span>
+            <strong class="back-birthday"></strong>
+          </div>
+          <p class="tap-note">Tap to flip back</p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
