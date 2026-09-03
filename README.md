@@ -1,20 +1,15 @@
-# Face Cards
+# Face Cards v2
 
-A private installable web app for remembering people by face, name, and birthday.
+Changes in this version:
+- No names on the front of cards.
+- Male / Female / Other-Unset category filters.
+- Drag-and-drop card rearranging on desktop.
+- Move left / Move right controls for mobile.
+- Notes field shown on the back of each card.
+- GQ photo-search shortcut plus Wikimedia automatic fallback.
+- Existing v1 cards are preserved; new fields default to blank.
 
-## Quick local preview
-For security reasons, installable web apps should be opened through a small local web server rather than by double-clicking index.html.
-
-If Python is installed:
-1. Open a terminal in this folder.
-2. Run: `python -m http.server 8000`
-3. Open: `http://localhost:8000`
-
-## Free online hosting
-Upload the folder contents to a GitHub repository and enable GitHub Pages. The app can then be installed from Chrome on Android or from a supported desktop browser.
-
-## Privacy
-Saved cards are stored in the current browser/device's local storage. Use Backup and Restore to move the deck between devices.
-
-## Data source
-Automatic lookup uses Wikidata and Wikimedia Commons. Search results should be reviewed before saving.
+## Important about GQ photos
+A zero-cost browser-only app cannot reliably and automatically scrape GQ images.
+The app therefore gives you a GQ-specific image search shortcut. You can download/upload
+the GQ image you want, while the automatic fallback remains Wikimedia.

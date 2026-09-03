@@ -23,10 +23,18 @@
   <main>
     <section class="toolbar">
       <input id="searchCards" type="search" placeholder="Search saved people">
-      <button id="studyBtn" class="secondary">Study mode</button>
       <button id="backupBtn" class="secondary">Backup</button>
       <label class="secondary file-label">Restore<input id="restoreInput" type="file" accept=".json,application/json"></label>
     </section>
+
+    <section class="category-tabs" aria-label="Card categories">
+      <button class="tab active" data-filter="all">All <span id="countAll"></span></button>
+      <button class="tab" data-filter="male">Male <span id="countMale"></span></button>
+      <button class="tab" data-filter="female">Female <span id="countFemale"></span></button>
+      <button class="tab" data-filter="other">Other / Unset <span id="countOther"></span></button>
+    </section>
+
+    <p class="reorder-hint">Drag cards to rearrange them. On mobile, open a card and use Move left / Move right.</p>
 
     <section id="emptyState" class="empty">
       <div class="empty-icon">👤</div>
@@ -56,7 +64,14 @@
             <button type="button" id="lookupBtn" class="primary">Find</button>
           </div>
         </label>
-        <p class="hint">Searches Wikidata. You will choose the correct person before saving.</p>
+
+        <div class="photo-source-box">
+          <strong>Photo preference: GQ first</strong>
+          <p>The app can’t automatically scrape GQ for free, so use “Search GQ” if you want a GQ image. If you do nothing, the automatic Wikimedia image is used.</p>
+          <button type="button" id="gqSearchBtn" class="secondary">Search GQ for this person</button>
+        </div>
+
+        <p class="hint">Automatic name, birthday and fallback photo lookup uses Wikidata/Wikimedia. You choose the correct person before saving.</p>
         <div id="lookupStatus" class="status" hidden></div>
         <div id="results" class="results"></div>
       </div>
@@ -72,6 +87,7 @@
             <label class="secondary upload-label">Choose photo from phone
               <input id="photoUpload" type="file" accept="image/*">
             </label>
+            <button type="button" id="editorGqSearchBtn" class="secondary full-width">Search GQ</button>
           </div>
         </div>
 
@@ -83,6 +99,20 @@
         <label>
           Birthday
           <input id="birthday" type="date">
+        </label>
+
+        <label>
+          Category
+          <select id="category">
+            <option value="">Other / Unset</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </label>
+
+        <label>
+          Notes
+          <textarea id="notes" rows="5" placeholder="Anything you want to remember about this person…"></textarea>
         </label>
 
         <div class="dialog-actions">
@@ -99,6 +129,10 @@
       <button id="closeCardDialog" class="icon-button" aria-label="Close">✕</button>
     </div>
     <div id="largeCard" class="face-card large" tabindex="0"></div>
+    <div class="reorder-buttons">
+      <button id="moveLeftBtn" class="secondary">← Move left</button>
+      <button id="moveRightBtn" class="secondary">Move right →</button>
+    </div>
     <div class="dialog-actions">
       <button id="editCardBtn" class="secondary">Edit</button>
       <button id="deleteCardBtn" class="danger">Delete</button>
@@ -106,18 +140,21 @@
   </dialog>
 
   <template id="cardTemplate">
-    <article class="face-card" tabindex="0">
+    <article class="face-card" tabindex="0" draggable="true">
       <div class="card-inner">
         <div class="card-face card-front">
           <img alt="">
-          <div class="front-caption"></div>
         </div>
         <div class="card-face card-back">
-          <p class="eyebrow">WHO IS THIS?</p>
+          <p class="eyebrow back-category"></p>
           <h2 class="back-name"></h2>
           <div class="birthday-block">
             <span>Birthday</span>
             <strong class="back-birthday"></strong>
+          </div>
+          <div class="notes-block">
+            <span>Notes</span>
+            <div class="back-notes"></div>
           </div>
           <p class="tap-note">Tap to flip back</p>
         </div>
